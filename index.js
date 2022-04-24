@@ -31,7 +31,6 @@ const run = async () => {
         app.post('/cartproduct', async (req, res) => {
             const body = req.body;
             const ids = body.map(key => ObjectId(key))
-            console.log(ids, body)
             const query = {
                 _id: {
                     $in: ids
