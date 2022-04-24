@@ -21,9 +21,17 @@ const run = async () => {
         const connectionDB = client.db('emajohn').collection('product')
 
         app.get('/product', async (req, res) => {
+            const page = parseInt(req.query.page);
+            const size = parseInt(req.query.size);
+            console.log(page, size)
             const query = {}
-            const result = await connectionDB.find(query).toArray();
+            const result = await connectionDB.find(query).skip(page * size).limit(size).toArray();
             res.send(result)
+        })
+
+        app.get('/productcount', async (req, res) => {
+            const count = await connectionDB.countDocuments()
+            res.send({ count })
         })
     }
     finally { }
