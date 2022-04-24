@@ -2,7 +2,7 @@ require('dotenv').config()
 const express = require('express');
 const cors = require('cors');
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const app = express()
 const port = process.env.PORT || 4000
@@ -26,6 +26,18 @@ const run = async () => {
             console.log(page, size)
             const query = {}
             const result = await connectionDB.find(query).skip(page * size).limit(size).toArray();
+            res.send(result)
+        })
+        app.post('/cartproduct', async (req, res) => {
+            const body = req.body;
+            const ids = body.map(key => ObjectId(key))
+            console.log(ids, body)
+            const query = {
+                _id: {
+                    $in: ids
+                }
+            }
+            const result = await connectionDB.find(query).toArray()
             res.send(result)
         })
 
